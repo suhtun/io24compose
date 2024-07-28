@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,8 +28,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import com.su.io24_compose_experimental.R
+import kotlin.math.absoluteValue
+
 /*
 val fling = PagerDefault.flingBehavior(state = pagerState, pagerSnapDistance = PagerSnapDistance.atMost(2))
 val pageOffset = pagerState.getOffsetDistanceInPages(page).absoluteValue
@@ -40,21 +46,32 @@ Box size = 286.dp * (2 - pageOffset)
 @Composable
 fun SamplePager(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState(pageCount = { 10 })
+
+    val fling = PagerDefaults.flingBehavior(
+        state = pagerState,
+        pagerSnapDistance = PagerSnapDistance.atMost(2)
+    )
     HorizontalPager(
         state = pagerState,
         beyondViewportPageCount = 2,
+        flingBehavior = fling
     ) { page ->
-        SongItem()
+
+        val pageOffset = pagerState.getOffsetDistanceInPages(page).absoluteValue
+
+        SongItem(pageOffset)
     }
 }
 
 @Preview
 @Composable
 private fun SongItem(
+    pageOffset: Float = 0f,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(286.dp * (2 - pageOffset))
             .padding(32.dp)
             .background(Color.White, RoundedCornerShape(16.dp))
     ) {
@@ -64,7 +81,12 @@ private fun SongItem(
                 contentDescription = "baby",
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .height(230.dp),
+                    .height(230.dp)
+                    .graphicsLayer {
+                        val scale = lerp(1f, 1.75f, pageOffset)
+                        scaleX *= scale
+                        scaleY *= scale
+                    },
                 contentScale = ContentScale.Crop
             )
         }

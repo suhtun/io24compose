@@ -26,7 +26,7 @@ fun SampleLazyListAnimatedItem(modifier: Modifier = Modifier) {
         }
         LazyColumn {
             items(list.size, key = { it }) {
-                Card() {
+                Card(Modifier.animateItem()) {
                     Text("Item $it")
                 }
             }

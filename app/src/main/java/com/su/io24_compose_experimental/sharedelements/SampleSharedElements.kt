@@ -3,6 +3,7 @@ package com.su.io24_compose_experimental.sharedelements
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,25 +40,33 @@ with(sharedTransitionScope) {
                animatedVisibilityScope = animatedVisibilityScope)
 }
 * */
+
+const val SAMPLE_KEY = "sample"
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SampleSharedElements(modifier: Modifier = Modifier) {
     var showDetail by remember {
         mutableStateOf(false)
     }
 
-    AnimatedContent(showDetail, label = "basic") { targetScope ->
-        if (!targetScope) {
-            MainContent(
-                modifier = modifier,
-                onShowDetail = { showDetail = !showDetail },
-                animatedVisibilityScope = this@AnimatedContent
-            )
-        } else {
-            DetailsContent(
-                modifier = modifier,
-                onBack = { showDetail = !showDetail },
-                animatedVisibilityScope = this@AnimatedContent
-            )
+    SharedTransitionLayout {
+        AnimatedContent(showDetail, label = "basic") { targetScope ->
+            if (!targetScope) {
+                MainContent(
+                    modifier = modifier,
+                    onShowDetail = { showDetail = !showDetail },
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent
+                )
+            } else {
+                DetailsContent(
+                    modifier = modifier,
+                    onBack = { showDetail = !showDetail },
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent
+                )
+            }
         }
     }
 }
@@ -67,6 +76,7 @@ fun SampleSharedElements(modifier: Modifier = Modifier) {
 fun MainContent(
     modifier: Modifier = Modifier,
     onShowDetail: () -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Box(
@@ -76,13 +86,19 @@ fun MainContent(
             .clickable { onShowDetail() },
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.strawberry),
-            contentDescription = "strawberry",
-            modifier = Modifier
-                .size(160.dp)
-                .padding(10.dp)
-        )
+        with(sharedTransitionScope) {
+            Image(
+                painter = painterResource(id = R.drawable.strawberry),
+                contentDescription = "strawberry",
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = SAMPLE_KEY),
+                        animatedVisibilityScope
+                    )
+                    .size(160.dp)
+                    .padding(10.dp)
+            )
+        }
     }
 }
 
@@ -91,6 +107,7 @@ fun MainContent(
 fun DetailsContent(
     modifier: Modifier = Modifier,
     onBack: () -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Column(modifier = Modifier
@@ -103,14 +120,19 @@ fun DetailsContent(
         )
         .clickable { onBack() }) {
         Spacer(modifier = Modifier.height(20.dp))
-
-        Image(
-            painter = painterResource(id = R.drawable.strawberry),
-            contentDescription = "strawberry",
-            modifier = Modifier
-                .size(200.dp)
-                .padding(10.dp)
-        )
+        with(sharedTransitionScope) {
+            Image(
+                painter = painterResource(id = R.drawable.strawberry),
+                contentDescription = "strawberry",
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = SAMPLE_KEY),
+                        animatedVisibilityScope
+                    )
+                    .size(200.dp)
+                    .padding(10.dp)
+            )
+        }
     }
     Spacer(modifier = Modifier.height(10.dp))
     Text(

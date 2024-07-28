@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -49,12 +53,38 @@ fun SampleSegmentedButtons(modifier: Modifier = Modifier) {
         var selectedIndexNumber by remember {
             mutableStateOf(0)
         }
+        SingleChoiceSegmentedButtonRow {
+            numbers.forEachIndexed { index, s ->
+                SegmentedButton(
+                    selected = index == selectedIndexNumber,
+                    onClick = { selectedIndexNumber = index }, shape =
+                    SegmentedButtonDefaults.itemShape(index = index, count = numbers.size)
+                ) {
+
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
         val vegetables = listOf("Tomato", "Potato", "Onion")
         var checkedList = remember {
             mutableStateListOf<Int>()
+        }
+        MultiChoiceSegmentedButtonRow {
+            vegetables.forEachIndexed { index, vege ->
+                SegmentedButton(checked = index in checkedList,
+                    onCheckedChange = {
+                        if (it) checkedList.add(index) else checkedList.remove(index)
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(
+                        index = index,
+                        count = vegetables.size
+                    )
+                ) {
+
+                }
+            }
         }
     }
 }

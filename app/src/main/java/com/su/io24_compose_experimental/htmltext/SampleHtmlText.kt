@@ -3,9 +3,16 @@ package com.su.io24_compose_experimental.htmltext
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.dp
 
 /*
@@ -19,14 +26,16 @@ AnnotatedString.fromHtml()
 
 @Composable
 fun SampleHtmlText(modifier: Modifier = Modifier) {
-    val htmlText =
-        "This is an <b>example</b> with <a href='https://www.google.com'>inline links</a> and <i>HTML formatting</i>."
-
+    val linkStyle = TextLinkStyles(SpanStyle(color = Color.Black, fontStyle = FontStyle.Italic))
+    val htmlText = "This is an <b>example</b> with <a href='https://www.google.com'>inline links</a> and <i>HTML formatting</i>."
+    
+    val text = AnnotatedString.fromHtml(htmlText, linkStyle)
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
+        BasicText(text = text)
     }
 }

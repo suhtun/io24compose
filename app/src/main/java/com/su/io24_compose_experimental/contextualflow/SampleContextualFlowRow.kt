@@ -2,6 +2,9 @@ package com.su.io24_compose_experimental.contextualflow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ContextualFlowRow
+import androidx.compose.foundation.layout.ContextualFlowRowOverflow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -21,10 +24,23 @@ ContextualFlowRow(itemCount,maxLines,overflow)
 * */
 
 
+@Preview
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SampleContextualFlowRow(modifier: Modifier = Modifier) {
     val colorItems = remember {
         (0..10).map { randomColor() }.toList()
+    }
+
+    val overflow = ContextualFlowRowOverflow.expandIndicator {
+        ColorBoxItem(
+            text = "+${colorItems.size - this.shownItemCount}",)
+    }
+
+    ContextualFlowRow(itemCount = colorItems.size,
+        overflow = overflow) {
+        ColorBoxItem(text = "$it",
+            color = colorItems[it])
     }
 }
 

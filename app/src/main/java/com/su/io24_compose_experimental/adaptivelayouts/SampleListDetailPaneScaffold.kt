@@ -13,7 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,9 +30,19 @@ get content = navigator.currentDestination?.content?
 * */
 
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SampleListDetailPaneScaffold(modifier: Modifier = Modifier) {
-    
+    val navigtor = rememberListDetailPaneScaffoldNavigator<Any>()
+    NavigableListDetailPaneScaffold(navigator = navigtor,
+        listPane = {MainPane(navToDetail = {item->
+            navigtor.navigateTo(
+            pane = ListDetailPaneScaffoldRole.Detail,
+            content = "$item"
+        )})}, detailPane = {
+            val content = navigtor.currentDestination?.content.toString()
+            DetailPane(text = content,
+                navToExtra = {navigtor.navigateTo(ListDetailPaneScaffoldRole.Extra)})},)
 }
 
 @Preview

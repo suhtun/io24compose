@@ -3,6 +3,7 @@ package com.su.io24_compose_experimental.pulltorefresh
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -16,20 +17,25 @@ PullToRefreshBox(isRefreshing = viewModel.isRefreshing,onRefresh = { viewModel.r
 * */
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SamplePullToRefresh(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val viewModel = viewModel<PullToRefreshViewModel>()
 
-        LazyColumn(Modifier.fillMaxSize()) {
-            items(viewModel.itemCount) {
-                ListItem({
-                    Text(
-                        text = "Item ${viewModel.itemCount - it}",
-                        modifier = Modifier.animateItem()
-                    )
-                })
+        PullToRefreshBox(
+            isRefreshing = viewModel.isRefreshing,
+            onRefresh = { viewModel.refresh() }) {
+            LazyColumn(Modifier.fillMaxSize()) {
+                items(viewModel.itemCount) {
+                    ListItem({
+                        Text(
+                            text = "Item ${viewModel.itemCount - it}",
+                            modifier = Modifier.animateItem()
+                        )
+                    })
+                }
             }
         }
     }
