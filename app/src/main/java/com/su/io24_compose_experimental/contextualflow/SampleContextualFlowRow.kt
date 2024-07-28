@@ -34,13 +34,19 @@ fun SampleContextualFlowRow(modifier: Modifier = Modifier) {
 
     val overflow = ContextualFlowRowOverflow.expandIndicator {
         ColorBoxItem(
-            text = "+${colorItems.size - this.shownItemCount}",)
+            text = "+${colorItems.size - this.shownItemCount}",
+        )
     }
 
-    ContextualFlowRow(itemCount = colorItems.size,
-        overflow = overflow) {
-        ColorBoxItem(text = "$it",
-            color = colorItems[it])
+    ContextualFlowRow(
+        itemCount = colorItems.size,
+        maxLines = 1,
+        overflow = overflow
+    ) {
+        ColorBoxItem(
+            text = "$it",
+            color = colorItems[it]
+        )
     }
 }
 
