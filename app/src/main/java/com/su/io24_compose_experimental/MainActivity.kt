@@ -4,25 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,7 +15,8 @@ import com.su.io24_compose_experimental.adaptivelayouts.SampleListDetailPaneScaf
 import com.su.io24_compose_experimental.adaptivelayouts.SampleNavigationSuiteScaffold
 import com.su.io24_compose_experimental.carousel.SampleCarousel
 import com.su.io24_compose_experimental.contextualflow.SampleContextualFlowRow
-import com.su.io24_compose_experimental.delightfulpager.SamplePager
+import com.su.io24_compose_experimental.delightfului.SamplePager
+import com.su.io24_compose_experimental.delightfului.SamplerNestedScroll
 import com.su.io24_compose_experimental.htmltext.SampleHtmlText
 import com.su.io24_compose_experimental.lazylistanims.SampleLazyListAnimatedItem
 import com.su.io24_compose_experimental.pulltorefresh.SamplePullToRefresh
@@ -50,6 +36,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = NavRoutes.NAV_HOME) {
                             HomeScreen(
                                 Modifier.padding(innerPadding),
+                                navToNestedScroll = { navController.navigate(NavRoutes.NAV_NESTEDSCROLL) },
                                 navToNavigableSuiteScaffold = {
                                     navController.navigate(NavRoutes.NAV_SUITE_SCAFFOLD)
                                 },
@@ -111,6 +98,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(NavRoutes.NAV_PULLTOREFRESHBOX) {
                             SamplePullToRefresh()
+                        }
+                        composable(NavRoutes.NAV_NESTEDSCROLL) {
+                            SamplerNestedScroll()
                         }
                     }
                 }

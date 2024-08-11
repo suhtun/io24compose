@@ -14,4 +14,5 @@ object NavRoutes {
     const val NAV_PAGER = "Pager"
     const val NAV_LAZYLISTANIMATION = "LazyListAnimation"
     const val NAV_CARD = "Card"
+    const val NAV_NESTEDSCROLL = "NestedScroll"
 }

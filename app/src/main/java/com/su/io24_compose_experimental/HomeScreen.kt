@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navToNestedScroll:()->Unit ={},
     navToNavigableSuiteScaffold: () -> Unit = {},
     navToListDetail: () -> Unit = {},
     navToPager: () -> Unit = {},
@@ -40,6 +41,11 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        RoundedButton(
+            text = "Preview NestedScroll",
+            onClick = { navToNestedScroll() }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
         RoundedButton(
             text = "Preview NavigableSuiteScaffold",
             onClick = { navToNavigableSuiteScaffold() }
